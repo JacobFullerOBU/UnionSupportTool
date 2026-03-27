@@ -137,11 +137,30 @@
     </div>
     <script>
         const tips = [
-            "Win + V opens your Clipboard History.",
-            "Ctrl + Shift + T reopens the last closed tab.",
-            "Restarting fixes most small bugs and issues.",
-            "Ctrl + Backspace deletes entire words at a time.",
-            "Win + Shift + S is the fastest way to screenshot. It opens the snipping tool and lets you select a portion of the screen to capture."
+            // --- PREVENTATIVE CARE (HARDWARE) ---
+            "The Pencil Trap: Never leave a pencil on your keyboard. One closure = one cracked screen.",
+            "Cable Care: Pull the plug part of the charger, not the cord. Pulling the cord ruins the internal wiring.",
+            "Clean Hands: Grease and crumbs are the #1 cause of 'sticky' or failing keys.",
+            "No Liquids: Even a closed water bottle is a risk. Keep drinks on the floor, not the desk.",
+            "Gentle Closure: You don't need to slam a laptop shut. Close it like a book you care about.",
+            "Heat Check: Don't use your laptop on top of a pillow or blanket; it blocks the fans and causes overheating.",
+            "Port Safety: If a USB or charger doesn't slide in easily, STOP. Forcing it can lead to further damage.",
+            "Screen Protection: Do not grab the screen to move the laptop. Always hold it by the base to avoid putting stress on the hinges/display.",
+
+            // --- GENERAL USAGE & EFFICIENCY ---
+            "Desktop Cleanliness: A messy desktop makes your computer work harder to load. Organize your files!",
+            "Search Pro: Use quotes in Google (like \"Tulsa History\") to find that exact phrase only.",
+            "To Screenshot: Win + Shift + S lets you snip a specific part of the screen, not the whole thing.",
+            "Bookmark Bar: Use Ctrl + D to save your most used school sites so you don't have to type them daily.",
+            "Mute Shortcut: Most Chromebooks/PCs have a dedicated mute key—learn where it is for emergencies!",
+
+            // --- DIGITAL HYGIENE ---
+            "Log Out: Always log out of your computer. Don't let others 'prank' you, which can get you in trouble.",
+            "File Naming: 'Document1' is a bad name. Use 'Science_Project_v1' so you can actually find it later.",
+            "Sync Check: Make sure your One Drive is syncing before you close your lid, or you might lose work. There should be a blue cloud icon in the taskbar.",
+            "Update Now: When you see a system update, do it! It usually contains security fixes to keep you safe. Your computer may also freeze if you ignore updates for too long.",
+            "Brightness Balance: Lowering your screen brightness can dramatically increase your battery life during the day.",
+            "Cloud Storage: Save everything to your OneDrive, not the 'Downloads' folder. Downloads are not backed up by your OneDrive."
         ];
         const quotes = [
             "\"A grateful heart is a magnet for miracles.\"",
@@ -215,8 +234,8 @@
             }
             cycleContent('tech-tip', tips);
             cycleContent('quote', quotes);
-            setInterval(() => cycleContent('tech-tip', tips), 600000);
-            setInterval(() => cycleContent('quote', quotes), 600000);
+            setInterval(() => cycleContent('tech-tip', tips), 200000);
+            setInterval(() => cycleContent('quote', quotes), 200000);
         };
     </script>
 </body>
