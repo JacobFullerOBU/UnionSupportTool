@@ -6,100 +6,109 @@
     <style>
         :root {
             --bg-color: #000;
-            --card-bg: rgba(20, 20, 20, 0.85); 
             --matrix-green: #00ff41;
+            --header-cyan: #00f2ff;
             --accent-purple: rgba(142, 68, 173, 0.9);
+            --card-bg: rgba(10, 10, 10, 0.95);
             --text-white: #ffffff;
         }
-
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
+            margin: 0; padding: 0;
+            width: 100vw; height: 100vh;
             overflow: hidden;
             background-color: var(--bg-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             color: var(--text-white);
         }
-
-        #matrix-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 0;
-        }
-
+        #matrix-canvas { position: absolute; top: 0; left: 0; z-index: 0; }
         .main-content {
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             height: 100%;
-            z-index: 1; /* Sits on top of canvas */
-            pointer-events: none; /* Allows clicks to pass through if needed */
+            z-index: 1;
+            gap: 20px;
+            padding-top: 60px;
         }
-
-        .title-section {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--matrix-green);
-            text-shadow: 0 0 15px rgba(0, 255, 65, 0.7);
-            margin-bottom: 50px;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        .container {
-            display: flex;
-            gap: 40px;
-        }
-
-        .card {
+        .wide-box {
+            width: 70%;
+            max-width: 1100px;
             background-color: var(--card-bg);
-            border: 1px solid rgba(0, 255, 65, 0.3);
-            border-radius: 15px;
-            width: 450px;
-            height: 280px;
+            border: 2px solid var(--matrix-green);
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            backdrop-filter: blur(5px); /* Adds a modern 'glass' look */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 1);
+            backdrop-filter: blur(12px);
+            padding: 15px 0; 
         }
-
-        .clock-card {
+        .header-box {
+            background-color: rgba(0, 5, 10, 0.9);
+            border: 2px solid var(--header-cyan);
+            min-height: 100px;
+            height: auto;
+            width: 90%;
+            max-width: 1200px;
+            animation: pulse-border 4s infinite ease-in-out;
+            padding: 20px;
+        }
+        .welcome-text {
+            font-size: 3.5rem; 
+            font-weight: 900;
+            color: var(--header-cyan);
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 10px #000, 0 0 20px var(--header-cyan); 
+            margin: 0;
+            text-align: center;
+            line-height: 1.2;
+            max-width: 95%;
+        }
+        @keyframes pulse-border {
+            0% { border-color: var(--header-cyan); box-shadow: 0 0 5px var(--header-cyan); }
+            50% { border-color: #0088ff; box-shadow: 0 0 20px #0088ff; }
+            100% { border-color: var(--header-cyan); box-shadow: 0 0 5px var(--header-cyan); }
+        }
+        .time-box {
             background-color: var(--accent-purple);
             border: none;
+            height: 200px;
         }
-
-        #clock { 
-            font-size: 4.5rem; 
-            font-weight: bold;
+        #clock { font-size: 7.5rem; font-weight: 800; margin: 0; line-height: 1; }
+        #period-info {
+            font-size: 1.6rem; margin-top: 10px;
+            font-family: 'Courier New', monospace; font-weight: bold;
+            background: rgba(0,0,0,0.5); padding: 5px 25px;
+            border-radius: 30px; color: var(--matrix-green);
+        }
+        .box-label {
+            font-size: 1rem; text-transform: uppercase;
+            letter-spacing: 4px; color: var(--matrix-green);
+            margin-bottom: 12px; font-weight: 900;
+        }
+        .content-text {
+            font-size: 2.3rem;
+            text-align: center;
             margin: 0;
+            padding: 0 40px;
+            font-weight: 600;
+            line-height: 1.3; 
+            max-width: 90%; 
+            word-wrap: break-word;
+            transition: opacity 0.6s ease;
         }
-
-        #period-status { 
-            font-size: 1.6rem; 
-            margin-top: 10px;
-            letter-spacing: 1px;
+        .tech-box, .quote-box { 
+            height: auto; 
+            width: 90%;
+            min-height: 160px; 
+            padding: 25px 0;
         }
-
-        #countdown { 
-            font-size: 1.1rem; 
-            margin-top: 15px;
-            opacity: 0.9;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        .quote-card h2 { 
-            font-size: 2rem;
-            padding: 30px; 
-            font-style: italic; 
-            line-height: 1.4;
-        }
+        .fade-out { opacity: 0; }
     </style>
 </head>
 <body>
@@ -107,106 +116,107 @@
     <canvas id="matrix-canvas"></canvas>
 
     <div class="main-content">
-        <div class="title-section">{ Welcome to the IT Office }</div>
+        <div class="wide-box header-box">
+            <h1 class="welcome-text">{ WELCOME TO THE IT OFFICE }</h1>
+        </div>
 
-        <div class="container">
-            <div class="card quote-card">
-                <h2>"A grateful heart is a magnet for miracles"</h2>
-            </div>
+        <div class="wide-box time-box">
+            <div id="clock">00:00 PM</div>
+            <div id="period-info">System Online...</div>
+        </div>
 
-            <div class="card clock-card">
-                <div id="clock">00:00:00 PM</div>
-                <div id="period-status">Loading Schedule...</div>
-                <div id="countdown">--:-- remaining</div>
-            </div>
+        <div class="wide-box tech-box">
+            <div class="box-label">Tech Tip:</div>
+            <p id="tech-tip" class="content-text">Loading...</p>
+        </div>
+
+        <div class="wide-box quote-box">
+            <div class="box-label">Quote:</div>
+            <p id="quote" class="content-text">Loading...</p>
         </div>
     </div>
-
     <script>
+        const tips = [
+            "Win + V opens your Clipboard History.",
+            "Ctrl + Shift + T reopens the last closed tab.",
+            "Restarting fixes most small bugs and issues.",
+            "Ctrl + Backspace deletes entire words at a time.",
+            "Win + Shift + S is the fastest way to screenshot. It opens the snipping tool and lets you select a portion of the screen to capture."
+        ];
+        const quotes = [
+            "\"A grateful heart is a magnet for miracles.\"",
+            "\"Small progress is still progress.\"",
+            "\"Focus on being productive instead of busy.\"",
+            "\"Your attitude determines your direction.\"",
+            "\"The expert in anything was once a beginner.\""
+        ];
+        const schedule = [
+            { name: "1st hour", start: [7,32], end: [8,31] },
+            { name: "2nd hour", start: [8,35], end: [9,33] },
+            { name: "3rd hour", start: [9,37], end: [10,35] },
+            { name: "4th hour", start: [10,39], end: [12,15] },
+            { name: "5th hour", start: [12,19], end: [13,17] },
+            { name: "6th hour", start: [13,21], end: [14,19] }
+        ];
         window.onload = function() {
             const canvas = document.getElementById('matrix-canvas');
             const ctx = canvas.getContext('2d');
-
-            // Initialize Canvas Size
             function resize() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             }
             resize();
             window.onresize = resize;
-
-            // Matrix Characters
-            const characters = "01010101ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ";
-            const fontSize = 16;
+            const chars = "01010101ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿ";
+            const fontSize = 18;
             const columns = Math.floor(canvas.width / fontSize);
             const drops = Array(columns).fill(1);
-
             function drawMatrix() {
-                ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+                ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-
                 ctx.fillStyle = "#0F0";
                 ctx.font = fontSize + "px monospace";
-
                 for (let i = 0; i < drops.length; i++) {
-                    const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
                     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
                     drops[i]++;
                 }
             }
-
-            // Schedule Logic
-            const schedule = [
-                { name: "1st hour", start: [7,32], end: [8,31] },
-                { name: "2nd hour", start: [8,35], end: [9,33] },
-                { name: "3rd hour", start: [9,37], end: [10,35] },
-                { name: "4th hour", start: [10,39], end: [12,15] },
-                { name: "5th hour", start: [12,19], end: [13,17] },
-                { name: "6th hour", start: [13,21], end: [14,19] }
-            ];
-
-            function updateTime() {
+            setInterval(drawMatrix, 35);
+            function updateClock() {
                 const now = new Date();
-                
-                // Clock Display
                 let h = now.getHours();
                 const m = now.getMinutes();
-                const s = now.getSeconds();
                 const ampm = h >= 12 ? 'PM' : 'AM';
-                const displayH = h % 12 || 12;
-                document.getElementById('clock').textContent = 
-                    `${displayH}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`;
-
-                // Period Logic
-                const currentTotalSecs = (h * 3600) + (m * 60) + s;
-                let status = "Out of Office Hours";
-                let countText = "";
-
+                document.getElementById('clock').textContent = `${h % 12 || 12}:${String(m).padStart(2,'0')} ${ampm}`;
+                const totalSecs = (h * 3600) + (m * 60) + now.getSeconds();
+                let status = "Passing Period";
                 for (let p of schedule) {
                     const sTime = (p.start[0] * 3600) + (p.start[1] * 60);
                     const eTime = (p.end[0] * 3600) + (p.end[1] * 60) + 59;
-
-                    if (currentTotalSecs >= sTime && currentTotalSecs <= eTime) {
-                        status = `It is ${p.name} now`;
-                        const diff = eTime - currentTotalSecs;
-                        const mins = Math.floor(diff / 60);
-                        const secs = diff % 60;
-                        countText = `${mins}m ${secs}s remaining`;
+                    if (totalSecs >= sTime && totalSecs <= eTime) {
+                        const diff = eTime - totalSecs;
+                        status = `${p.name} | ${Math.floor(diff/60)}m ${diff%60}s left`;
                         break;
                     }
                 }
-                document.getElementById('period-status').textContent = status;
-                document.getElementById('countdown').textContent = countText;
+                document.getElementById('period-info').textContent = status;
             }
-
-            // Set Loops
-            setInterval(drawMatrix, 35);
-            setInterval(updateTime, 1000);
-            updateTime();
+            setInterval(updateClock, 1000);
+            updateClock();
+            function cycleContent(elementId, list) {
+                const el = document.getElementById(elementId);
+                el.classList.add('fade-out');
+                setTimeout(() => {
+                    el.textContent = list[Math.floor(Math.random() * list.length)];
+                    el.classList.remove('fade-out');
+                }, 600);
+            }
+            cycleContent('tech-tip', tips);
+            cycleContent('quote', quotes);
+            setInterval(() => cycleContent('tech-tip', tips), 600000);
+            setInterval(() => cycleContent('quote', quotes), 600000);
         };
     </script>
 </body>
