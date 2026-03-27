@@ -2,25 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>IT Office Digital Sign</title>
+    <title>IT Office Digital Signage</title>
     <style>
         :root {
             --bg-color: #000;
+            /* Core Theme Variables */
             --matrix-green: #00ff41;
             --header-cyan: #00f2ff;
-            --accent-purple: rgba(142, 68, 173, 0.9);
+            --accent-purple: #8e44ad;
             --card-bg: rgba(10, 10, 10, 0.95);
             --text-white: #ffffff;
+            
+            /* Handles the smooth crossfade between themes */
+            transition: --matrix-green 3s ease, --header-cyan 3s ease, --accent-purple 3s ease;
         }
+
+        /* Fallback transitions for elements */
+        .wide-box, .welcome-text, .box-label, #period-info, #clock {
+            transition: all 3s ease-in-out;
+        }
+
         body, html {
             margin: 0; padding: 0;
             width: 100vw; height: 100vh;
             overflow: hidden;
             background-color: var(--bg-color);
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: var(--text-white);
         }
-        #matrix-canvas { position: absolute; top: 0; left: 0; z-index: 0; }
+
+        #matrix-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 0;
+        }
+
         .main-content {
             position: relative;
             display: flex;
@@ -30,10 +46,11 @@
             height: 100%;
             z-index: 1;
             gap: 20px;
-            padding-top: 60px;
+            padding-top: 60px; /* Spaced down from the top bezel */
         }
+
         .wide-box {
-            width: 70%;
+            width: 85%;
             max-width: 1100px;
             background-color: var(--card-bg);
             border: 2px solid var(--matrix-green);
@@ -44,8 +61,10 @@
             align-items: center;
             box-shadow: 0 0 25px rgba(0, 0, 0, 1);
             backdrop-filter: blur(12px);
-            padding: 15px 0; 
+            text-align: center;
         }
+
+        /* HEADER SECTION */
         .header-box {
             background-color: rgba(0, 5, 10, 0.9);
             border: 2px solid var(--header-cyan);
@@ -53,61 +72,80 @@
             height: auto;
             width: 90%;
             max-width: 1200px;
-            animation: pulse-border 4s infinite ease-in-out;
             padding: 20px;
+            animation: pulse-glow 4s infinite ease-in-out;
         }
+
         .welcome-text {
-            font-size: 3.5rem; 
+            font-size: 3.5rem;
             font-weight: 900;
             color: var(--header-cyan);
             text-transform: uppercase;
-            letter-spacing: 6px;
+            letter-spacing: 8px;
             font-family: 'Courier New', Courier, monospace;
             text-shadow: 0 0 10px #000, 0 0 20px var(--header-cyan); 
             margin: 0;
-            text-align: center;
             line-height: 1.2;
-            max-width: 95%;
         }
-        @keyframes pulse-border {
+
+        @keyframes pulse-glow {
             0% { border-color: var(--header-cyan); box-shadow: 0 0 5px var(--header-cyan); }
             50% { border-color: #0088ff; box-shadow: 0 0 20px #0088ff; }
             100% { border-color: var(--header-cyan); box-shadow: 0 0 5px var(--header-cyan); }
         }
+
+        /* TIME SECTION */
         .time-box {
             background-color: var(--accent-purple);
             border: none;
             height: 200px;
         }
-        #clock { font-size: 7.5rem; font-weight: 800; margin: 0; line-height: 1; }
-        #period-info {
-            font-size: 1.6rem; margin-top: 10px;
-            font-family: 'Courier New', monospace; font-weight: bold;
-            background: rgba(0,0,0,0.5); padding: 5px 25px;
-            border-radius: 30px; color: var(--matrix-green);
-        }
-        .box-label {
-            font-size: 1rem; text-transform: uppercase;
-            letter-spacing: 4px; color: var(--matrix-green);
-            margin-bottom: 12px; font-weight: 900;
-        }
-        .content-text {
-            font-size: 2.3rem;
-            text-align: center;
+
+        #clock {
+            font-size: 7.5rem;
+            font-weight: 800;
             margin: 0;
-            padding: 0 40px;
+            line-height: 1;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        #period-info {
+            font-size: 1.6rem;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 25px;
+            border-radius: 30px;
+            color: var(--matrix-green);
+        }
+
+        /* CONTENT SECTIONS */
+        .box-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--matrix-green);
+            margin-bottom: 12px;
+            font-weight: 900;
+        }
+
+        .content-text {
+            font-size: 2.2rem;
+            margin: 0;
+            padding: 0 50px;
             font-weight: 600;
-            line-height: 1.3; 
-            max-width: 90%; 
-            word-wrap: break-word;
+            line-height: 1.3;
+            max-width: 90%;
             transition: opacity 0.6s ease;
         }
-        .tech-box, .quote-box { 
-            height: auto; 
-            width: 90%;
-            min-height: 160px; 
+
+        .tech-box, .quote-box {
+            height: auto;
+            min-height: 160px;
             padding: 25px 0;
         }
+
         .fade-out { opacity: 0; }
     </style>
 </head>
@@ -122,20 +160,29 @@
 
         <div class="wide-box time-box">
             <div id="clock">00:00 PM</div>
-            <div id="period-info">System Online...</div>
+            <div id="period-info">Initializing System...</div>
         </div>
 
         <div class="wide-box tech-box">
             <div class="box-label">Tech Tip:</div>
-            <p id="tech-tip" class="content-text">Loading...</p>
+            <p id="tech-tip" class="content-text">Scanning for data...</p>
         </div>
 
         <div class="wide-box quote-box">
-            <div class="box-label">Quote:</div>
-            <p id="quote" class="content-text">Loading...</p>
+            <div class="box-label">Quotes:</div>
+            <p id="quote" class="content-text">Loading motivation...</p>
         </div>
     </div>
+
     <script>
+        // --- 1. CONFIGURATION: THEMES & CONTENT ---
+        const themes = [
+            { name: "Classic Matrix", purple: "#8e44ad", cyan: "#00f2ff", green: "#00ff41" },
+            { name: "Deep Sea", purple: "#2980b9", cyan: "#00d4ff", green: "#00a8ff" },
+            { name: "Cyber Sunset", purple: "#c0392b", cyan: "#f1c40f", green: "#e67e22" },
+            { name: "High Voltage", purple: "#2c3e50", cyan: "#f39c12", green: "#f1c40f" },
+            { name: "Emerald Protocol", purple: "#1b5e20", cyan: "#b9f6ca", green: "#00e676" }
+        ];
         const tips = [
             // --- PREVENTATIVE CARE (HARDWARE) ---
             "The Pencil Trap: Never leave a pencil on your keyboard. One closure = one cracked screen.",
@@ -177,40 +224,77 @@
             { name: "5th hour", start: [12,19], end: [13,17] },
             { name: "6th hour", start: [13,21], end: [14,19] }
         ];
+
+        // --- 2. LOGIC ENGINE ---
+        let currentThemeIndex = 0;
+
+        function cycleTheme() {
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            const theme = themes[currentThemeIndex];
+            document.documentElement.style.setProperty('--accent-purple', theme.purple);
+            document.documentElement.style.setProperty('--header-cyan', theme.cyan);
+            document.documentElement.style.setProperty('--matrix-green', theme.green);
+        }
+
         window.onload = function() {
             const canvas = document.getElementById('matrix-canvas');
             const ctx = canvas.getContext('2d');
+
             function resize() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             }
             resize();
             window.onresize = resize;
+
             const chars = "01010101ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿ";
-            const fontSize = 18;
-            const columns = Math.floor(canvas.width / fontSize);
-            const drops = Array(columns).fill(1);
-            function drawMatrix() {
-                ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = "#0F0";
-                ctx.font = fontSize + "px monospace";
-                for (let i = 0; i < drops.length; i++) {
+            // --- TV OPTIMIZED MATRIX ENGINE ---
+        const fontSize = 24; // Larger font = fewer columns to calculate
+        const columns = Math.floor(canvas.width / fontSize);
+        const drops = Array(columns).fill(1);
+
+        function drawMatrix() {
+            // Lower opacity trailing effect saves GPU memory
+            ctx.fillStyle = "rgba(0, 0, 0, 0.1)"; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--matrix-green');
+            ctx.font = fontSize + "px monospace";
+            
+            for (let i = 0; i < drops.length; i++) {
+                // Skip 50% of columns randomly to reduce CPU load
+                if (Math.random() > 0.5) {
                     const text = chars.charAt(Math.floor(Math.random() * chars.length));
                     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
                     drops[i]++;
                 }
             }
-            setInterval(drawMatrix, 35);
+        }
+
+        // Smoother animation loop for weak TV processors
+        function animate() {
+            setTimeout(() => {
+                requestAnimationFrame(animate);
+                drawMatrix();
+            }, 60); // 60ms delay = ~16fps (Much easier for a TV to handle than 30+fps)
+        }
+        
+        animate(); // Call the new animation loop instead of setInterval
+
             function updateClock() {
                 const now = new Date();
                 let h = now.getHours();
                 const m = now.getMinutes();
                 const ampm = h >= 12 ? 'PM' : 'AM';
                 document.getElementById('clock').textContent = `${h % 12 || 12}:${String(m).padStart(2,'0')} ${ampm}`;
+
                 const totalSecs = (h * 3600) + (m * 60) + now.getSeconds();
-                let status = "Passing Period";
+                let status = "System Idle / Passing Period";
+                
                 for (let p of schedule) {
                     const sTime = (p.start[0] * 3600) + (p.start[1] * 60);
                     const eTime = (p.end[0] * 3600) + (p.end[1] * 60) + 59;
@@ -222,8 +306,7 @@
                 }
                 document.getElementById('period-info').textContent = status;
             }
-            setInterval(updateClock, 1000);
-            updateClock();
+
             function cycleContent(elementId, list) {
                 const el = document.getElementById(elementId);
                 el.classList.add('fade-out');
@@ -232,10 +315,18 @@
                     el.classList.remove('fade-out');
                 }, 600);
             }
+
+            // --- 3. SET INTERVALS ---
+            setInterval(drawMatrix, 35);
+            setInterval(updateClock, 1000);
+            setInterval(cycleTheme, 120000); // 2 Minute Theme Cycle
+            setInterval(() => cycleContent('tech-tip', tips), 600000); // 10 Min Tip Cycle
+            setInterval(() => cycleContent('quote', quotes), 600000); // 10 Min Quote Cycle
+
+            // Initial Load
+            updateClock();
             cycleContent('tech-tip', tips);
             cycleContent('quote', quotes);
-            setInterval(() => cycleContent('tech-tip', tips), 200000);
-            setInterval(() => cycleContent('quote', quotes), 200000);
         };
     </script>
 </body>
