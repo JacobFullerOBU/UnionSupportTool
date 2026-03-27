@@ -2,38 +2,191 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Union Technology Resources</title>
-    <link rel="stylesheet"href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>IT Office Digital Sign</title>
+    <style>
+        :root {
+            --bg-color: #000;
+            --card-bg: rgba(26, 26, 26, 0.9); /* Semi-transparent to see the matrix */
+            --matrix-green: #00ff41;
+            --accent-purple: rgba(155, 89, 182, 0.85);
+            --text-white: #ffffff;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Keeps the rain contained */
+            background-color: var(--bg-color);
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--text-white);
+        }
+
+        /* The Canvas for the Matrix effect */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1; /* Puts it behind everything */
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        .title-section {
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--matrix-green);
+            margin-bottom: 40px;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--matrix-green);
+            border-radius: 12px;
+            width: 450px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+
+        .clock-card {
+            background-color: var(--accent-purple);
+            border: none;
+        }
+
+        #clock { font-size: 4rem; margin-bottom: 5px; }
+        #period-status { font-size: 1.5rem; font-weight: bold; }
+        #countdown { 
+            font-size: 1.2rem; 
+            margin-top: 10px; 
+            color: #efefef;
+            font-family: sans-serif;
+        }
+
+        .quote-card h2 { padding: 20px; font-style: italic; }
+    </style>
 </head>
 <body>
 
-    <nav>
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="main-content">
+        <div class="title-section">{ Welcome to the IT Office }</div>
+
         <div class="container">
-            <div class="logo">
-                <img src="./Resources/Photos and Graphics/unionlogo.jpg" alt="union logo">
+            <div class="card quote-card">
+                <h2>"A grateful heart is a magnet for miracles"</h2>
             </div>
-            <ul>
-                <li><a href="./SubPages/Processes.html">Processes</a></li>
-                <li><a href="./SubPages/troubleshooting.html">Troubleshooting</a></li>
-                <li><a href="./SubPages/Imaging.html">Imaging</a></li>
-                <li><a href="./SubPages/Trafera.html">Broken Devices/Trafera</a></li>
-                <li><a href="./SubPages/Contact.html">Contact</a></li>
-            </ul>
+
+            <div class="card clock-card">
+                <div id="clock">00:00:00 PM</div>
+                <div id="period-status">Loading...</div>
+                <div id="countdown">--:-- remaining</div>
+            </div>
         </div>
-    </nav>
+    </div>
 
-    <header class="hero">
-        <h1>Union Technology Resources</h1>
-        <p>Your central hub for IT documentation, workflows, and support.</p>
-    </header>
+    <script>
+        // --- MATRIX RAIN EFFECT ---
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
 
-    
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    <footer>
-    2026 Union Technology Resources | Keeping U Informed ! | Developed by Jacob Fuller
-    </footer>
+        const alphabet = "日Hｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ1234567890ABCDEF";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const rainDrops = Array.from({ length: columns }).fill(1);
 
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        }
+
+        // --- DASHBOARD LOGIC ---
+        const schedule = [
+            { name: "1st hour", start: [7,32], end: [8,31] },
+            { name: "2nd hour", start: [8,35], end: [9,33] },
+            { name: "3rd hour", start: [9,37], end: [10,35] },
+            { name: "4th hour", start: [10,39], end: [12,15] },
+            { name: "5th hour", start: [12,19], end: [13,17] },
+            { name: "6th hour", start: [13,21], end: [14,19] }
+        ];
+
+        function updateDashboard() {
+            const now = new Date();
+            
+            // Clock
+            let h = now.getHours();
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            document.getElementById('clock').textContent = `${h % 12 || 12}:${m}:${s} ${ampm}`;
+
+            // Period & Countdown
+            const currentTotalSeconds = (h * 3600) + (now.getMinutes() * 60) + now.getSeconds();
+            let status = "Not in school hours";
+            let countdownText = "";
+
+            for (let period of schedule) {
+                const startSecs = (period.start[0] * 3600) + (period.start[1] * 60);
+                const endSecs = (period.end[0] * 3600) + (period.end[1] * 60) + 59; // include the last minute
+
+                if (currentTotalSeconds >= startSecs && currentTotalSeconds <= endSecs) {
+                    status = `It is ${period.name} now`;
+                    
+                    const diff = endSecs - currentTotalSeconds;
+                    const minLeft = Math.floor(diff / 60);
+                    const secLeft = diff % 60;
+                    countdownText = `${minLeft}m ${secLeft}s remaining`;
+                    break;
+                }
+            }
+
+            document.getElementById('period-status').textContent = status;
+            document.getElementById('countdown').textContent = countdownText;
+        }
+
+        // Intervals
+        setInterval(drawMatrix, 30);
+        setInterval(updateDashboard, 1000);
+        
+        // Resize canvas if window changes
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
 </body>
 </html>
