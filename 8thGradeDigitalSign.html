@@ -5,17 +5,16 @@
     <title>IT Office Digital Signage</title>
     <style>
         :root {
+            /default theme
             --bg-color: #000;
-            /* Core Theme Variables */
             --matrix-green: #00ff41;
             --header-cyan: #00f2ff;
             --accent-purple: #8e44ad;
             --card-bg: rgba(10, 10, 10, 0.95);
             --text-white: #ffffff;
-            /* Handles the smooth crossfade between themes */
+            /*transition for theme changes*/
             transition: --matrix-green 3s ease, --header-cyan 3s ease, --accent-purple 3s ease;
         }
-        /* Fallback transitions for elements */
         .wide-box, .welcome-text, .box-label, #period-info, #clock {
             transition: all 3s ease-in-out;
         }
@@ -57,7 +56,6 @@
             backdrop-filter: blur(12px);
             text-align: center;
         }
-        /* HEADER SECTION */
         .header-box {
             background-color: rgba(0, 5, 10, 0.9);
             border: 2px solid var(--header-cyan);
@@ -84,7 +82,6 @@
             50% { border-color: #0088ff; box-shadow: 0 0 20px #0088ff; }
             100% { border-color: var(--header-cyan); box-shadow: 0 0 5px var(--header-cyan); }
         }
-        /* TIME SECTION */
         .time-box {
             background-color: var(--accent-purple);
             border: none;
