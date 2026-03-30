@@ -318,27 +318,21 @@
                 }
             }
         }
-
-        // Smoother animation loop for weak TV processors
         function animate() {
             setTimeout(() => {
                 requestAnimationFrame(animate);
                 drawMatrix();
-            }, 60); // 60ms delay = ~16fps (Much easier for a TV to handle than 30+fps)
+            }, 100); // delay for tv to handle it better
         }
-        
         animate(); // Call the new animation loop instead of setInterval
-
             function updateClock() {
                 const now = new Date();
                 let h = now.getHours();
                 const m = now.getMinutes();
                 const ampm = h >= 12 ? 'PM' : 'AM';
                 document.getElementById('clock').textContent = `${h % 12 || 12}:${String(m).padStart(2,'0')} ${ampm}`;
-
                 const totalSecs = (h * 3600) + (m * 60) + now.getSeconds();
                 let status = "System Idle / Passing Period";
-                
                 for (let p of schedule) {
                     const sTime = (p.start[0] * 3600) + (p.start[1] * 60);
                     const eTime = (p.end[0] * 3600) + (p.end[1] * 60) + 59;
@@ -350,7 +344,6 @@
                 }
                 document.getElementById('period-info').textContent = status;
             }
-
             function cycleContent(elementId, list) {
                 const el = document.getElementById(elementId);
                 el.classList.add('fade-out');
@@ -359,15 +352,12 @@
                     el.classList.remove('fade-out');
                 }, 600);
             }
-
             // --- 3. SET INTERVALS ---
             setInterval(drawMatrix, 35);
             setInterval(updateClock, 1000);
-            setInterval(cycleTheme, 120000); // 2 Minute Theme Cycle
+            setInterval(cycleTheme, 120000); // 2 Minute between color change
             setInterval(() => cycleContent('tech-tip', tips), 60000); // 1 Min Tip Cycle
             setInterval(() => cycleContent('quote', quotes), 60000); // 1 Min Quote Cycle
-
-            // Initial Load
             updateClock();
             cycleContent('tech-tip', tips);
             cycleContent('quote', quotes);
