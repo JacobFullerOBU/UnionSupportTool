@@ -156,16 +156,23 @@
     </div>
 
     <script>
-        // --- 1. CONFIGURATION: THEMES & CONTENT ---
         const themes = [
             { name: "Classic Matrix", purple: "#8e44ad", cyan: "#00f2ff", green: "#00ff41" },
             { name: "Deep Sea", purple: "#2980b9", cyan: "#00d4ff", green: "#00a8ff" },
             { name: "Cyber Sunset", purple: "#c0392b", cyan: "#f1c40f", green: "#e67e22" },
             { name: "High Voltage", purple: "#2c3e50", cyan: "#f39c12", green: "#f1c40f" },
-            { name: "Emerald Protocol", purple: "#1b5e20", cyan: "#b9f6ca", green: "#00e676" }
+            { name: "Emerald Protocol", purple: "#1b5e20", cyan: "#b9f6ca", green: "#00e676" },
+            { name: "Classic Matrix", purple: "#8e44ad", cyan: "#00f2ff", green: "#00ff41" },
+            { name: "Cyberpunk", purple: "#ff00ff", cyan: "#ffee00", green: "#00ffcc" },
+            { name: "Wasteland", purple: "#ff8000", cyan: "#ffb000", green: "#ffcc00" },
+            { name: "System Alert", purple: "#7f0000", cyan: "#ff0000", green: "#ff4d4d" },
+            { name: "Biohazard", purple: "#1a3a08", cyan: "#ccff00", green: "#39ff14" },
+            { name: "Cloud Core", purple: "#001f3f", cyan: "#7fdbff", green: "#01ff70" },
+            { name: "Retro Wave", purple: "#4a00e0", cyan: "#ff0099", green: "#00d2ff" },
+            { name: "Magma Link", purple: "#4b0000", cyan: "#ff4500", green: "#ff8c00" }
         ];
         const tips = [
-            // --- PREVENTATIVE CARE (HARDWARE) ---
+            // Preventative Care
             "The Pencil Trap: Never leave a pencil on your keyboard. One closure = one cracked screen.",
             "Cable Care: Pull the plug part of the charger, not the cord. Pulling the cord ruins the internal wiring.",
             "Clean Hands: Grease and crumbs are the #1 cause of 'sticky' or failing keys.",
@@ -175,14 +182,14 @@
             "Port Safety: If a USB or charger doesn't slide in easily, STOP. Forcing it can lead to further damage.",
             "Screen Protection: Do not grab the screen to move the laptop. Always hold it by the base to avoid putting stress on the hinges/display.",
 
-            // --- GENERAL USAGE & EFFICIENCY ---
+            // Usage tips
             "Desktop Cleanliness: A messy desktop makes your computer work harder to load. Organize your files!",
             "Search Pro: Use quotes in Google (like \"Tulsa History\") to find that exact phrase only.",
             "To Screenshot: Win + Shift + S lets you snip a specific part of the screen, not the whole thing.",
             "Bookmark Bar: Use Ctrl + D to save your most used school sites so you don't have to type them daily.",
             "Mute Shortcut: Most Chromebooks/PCs have a dedicated mute key—learn where it is for emergencies!",
 
-            // --- DIGITAL HYGIENE ---
+            // General Cleanup 
             "Log Out: Always log out of your computer. Don't let others 'prank' you, which can get you in trouble.",
             "File Naming: 'Document1' is a bad name. Use 'Science_Project_v1' so you can actually find it later.",
             "Sync Check: Make sure your One Drive is syncing before you close your lid, or you might lose work. There should be a blue cloud icon in the taskbar.",
@@ -268,10 +275,7 @@
             { name: "5th hour", start: [12,19], end: [13,17] },
             { name: "6th hour", start: [13,21], end: [14,19] }
         ];
-
-        // --- 2. LOGIC ENGINE ---
         let currentThemeIndex = 0;
-
         function cycleTheme() {
             currentThemeIndex = (currentThemeIndex + 1) % themes.length;
             const theme = themes[currentThemeIndex];
@@ -279,18 +283,15 @@
             document.documentElement.style.setProperty('--header-cyan', theme.cyan);
             document.documentElement.style.setProperty('--matrix-green', theme.green);
         }
-
         window.onload = function() {
             const canvas = document.getElementById('matrix-canvas');
             const ctx = canvas.getContext('2d');
-
             function resize() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             }
             resize();
             window.onresize = resize;
-
             const chars = "01010101ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿ";
         const fontSize = 24; //forntzize of the matrix characters
         const columns = Math.floor(canvas.width / fontSize);
