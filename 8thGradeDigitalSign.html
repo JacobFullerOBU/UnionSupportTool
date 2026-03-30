@@ -292,21 +292,17 @@
             window.onresize = resize;
 
             const chars = "01010101ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿ";
-            // --- TV OPTIMIZED MATRIX ENGINE ---
-        const fontSize = 24; // Larger font = fewer columns to calculate
+        const fontSize = 24; //forntzize of the matrix characters
         const columns = Math.floor(canvas.width / fontSize);
         const drops = Array(columns).fill(1);
 
         function drawMatrix() {
-            // Lower opacity trailing effect saves GPU memory
+            // Lower opacity trailing effect 
             ctx.fillStyle = "rgba(0, 0, 0, 0.1)"; 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
+            ctx.fillRect(0, 0, canvas.width, canvas.height);   
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--matrix-green');
             ctx.font = fontSize + "px monospace";
-            
             for (let i = 0; i < drops.length; i++) {
-                // Skip 50% of columns randomly to reduce CPU load
                 if (Math.random() > 0.5) {
                     const text = chars.charAt(Math.floor(Math.random() * chars.length));
                     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
@@ -324,7 +320,7 @@
                 drawMatrix();
             }, 100); // delay for tv to handle it better
         }
-        animate(); // Call the new animation loop instead of setInterval
+        animate(); 
             function updateClock() {
                 const now = new Date();
                 let h = now.getHours();
